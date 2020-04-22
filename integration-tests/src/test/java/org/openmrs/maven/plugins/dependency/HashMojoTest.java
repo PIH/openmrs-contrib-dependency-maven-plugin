@@ -19,8 +19,8 @@ public class HashMojoTest {
 		verifier.executeGoal("clean");
 		verifier.executeGoal("generate-resources");
 
-		String expectedOutput = FileUtils.readFileToString(new File(projectDir, "expected-output.json")).trim();
-		String actualOutput = FileUtils.readFileToString(new File(projectDir, "target/hash-output.json")).trim();
+		String expectedOutput = FileUtils.readFileToString(new File(projectDir, "expected-output.yml")).trim();
+		String actualOutput = FileUtils.readFileToString(new File(projectDir, "target/hashes.yml")).trim();
 		Assert.assertEquals(expectedOutput, actualOutput);
 	}
 }

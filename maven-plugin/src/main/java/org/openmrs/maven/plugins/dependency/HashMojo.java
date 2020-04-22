@@ -49,7 +49,7 @@ public class HashMojo extends DependencyMojo {
 	@Parameter(property = "exclusions")
 	private List<Dependency> exclusions;
 
-	@Parameter(property = "outputFile", defaultValue = "${project.build.directory}/hash-output.json")
+	@Parameter(property = "outputFile", defaultValue = "${project.build.directory}/hashes.yml")
 	private File outputFile;
 
 	/**
@@ -67,9 +67,7 @@ public class HashMojo extends DependencyMojo {
 			if (!getBuildDir().exists()) {
 				getBuildDir().mkdirs();
 			}
-			ObjectMapper mapper = new ObjectMapper();
-			ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
-			writer.writeValue(outputFile, artifactHashes);
+			writeObjectToYamlFile(artifactHashes, outputFile);
 		}
 		catch (Exception e) {
 			throw new MojoExecutionException("Error writing snapshots to file", e);

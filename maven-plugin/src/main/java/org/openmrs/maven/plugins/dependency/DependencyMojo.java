@@ -13,10 +13,14 @@ import static org.twdata.maven.mojoexecutor.MojoExecutor.executionEnvironment;
 
 import java.io.File;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.BuildPluginManager;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -62,5 +66,19 @@ public abstract class DependencyMojo extends AbstractMojo {
 	 */
 	protected ArtifactRepository getLocalRepository() {
 		return mavenSession.getLocalRepository();
+	}
+
+	/**
+	 * Convenience method to enable writing an object to an output file as yaml
+	 */
+	protected void writeObjectToYamlFile(Object o, File outputFile) throws MojoExecutionException {
+		try {
+			ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+			ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
+			writer.writeValue(outputFile, o);
+		}
+		catch (Exception e) {
+			throw new MojoExecutionException("Error writing to Yaml output file", e);
+		}
 	}
 }
