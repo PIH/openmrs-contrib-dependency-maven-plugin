@@ -37,6 +37,15 @@ public abstract class DependencyMojo extends AbstractMojo {
 	@Parameter(defaultValue = "${session}", readonly = true)
 	MavenSession mavenSession;
 
+	@Parameter(property = "outputDir", defaultValue = "${project.build.directory}/openmrs-dependency")
+	File outputDir;
+
+	@Parameter(property = "versionsClassifier", defaultValue = "versions")
+	String versionsClassifier;
+
+	@Parameter(property = "versionsType", defaultValue = "yml")
+	String versionsType;
+
 	@Component
 	BuildPluginManager pluginManager;
 
@@ -69,13 +78,34 @@ public abstract class DependencyMojo extends AbstractMojo {
 	}
 
 	/**
+	 * @return the file representing the built versions artifact. Used by both the create and attach goals
+	 */
+	public File getVersionsOutputFile() {
+		return new File(outputDir, versionsClassifier + "." + versionsType);
+	}
+
+	/**
+	 * @return the file representing the built versions artifact. Used by both the create and attach goals
+	 */
+	public File getRetrievedVersionsOutputFile() {
+		return new File(outputDir, versionsClassifier + "-retrieved." + versionsType);
+	}
+
+	/**
+	 * Ensures the parent directory of the passed file exists
+	 */
+	public void ensureDirectoryExists(File file) {
+		if (file != null && file.getParentFile() != null && !file.getParentFile().exists()) {
+			file.getParentFile().mkdirs();
+		}
+	}
+
+	/**
 	 * Convenience method to enable writing an object to an output file as yaml
 	 */
 	protected void writeObjectToYamlFile(Object o, File outputFile) throws MojoExecutionException {
 		try {
-			if (!outputFile.getParentFile().exists()) {
-				outputFile.getParentFile().mkdirs();
-			}
+			ensureDirectoryExists(outputFile);
 			ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 			ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
 			writer.writeValue(outputFile, o);
