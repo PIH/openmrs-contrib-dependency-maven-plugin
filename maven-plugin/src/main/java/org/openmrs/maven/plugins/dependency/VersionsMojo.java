@@ -42,7 +42,7 @@ public class VersionsMojo extends DependencyMojo {
 	@Parameter(property = "includeAllArtifacts", defaultValue = "false")
 	private boolean includeAllArtifacts;
 
-	@Parameter(property = "outputFile", defaultValue = "${project.build.directory}/versions.yml")
+	@Parameter(property = "outputFile", defaultValue = "${project.build.directory}/openmrs-dependency/versions.yml")
 	private File outputFile;
 
 	/**

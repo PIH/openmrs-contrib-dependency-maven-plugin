@@ -73,6 +73,9 @@ public abstract class DependencyMojo extends AbstractMojo {
 	 */
 	protected void writeObjectToYamlFile(Object o, File outputFile) throws MojoExecutionException {
 		try {
+			if (!outputFile.getParentFile().exists()) {
+				outputFile.getParentFile().mkdirs();
+			}
 			ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 			ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
 			writer.writeValue(outputFile, o);
