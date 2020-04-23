@@ -83,7 +83,7 @@ public class VersionsMojo extends DependencyMojo {
 		String remoteVersion = getSnapshotVersion(remoteMetadata, "");
 		getLog().debug("Remote version: " + localVersion);
 
-		if (localVersion == remoteVersion) {
+		if (localVersion.equals(remoteVersion)) {
 			getLog().debug("Versions match, returning " + localVersion);
 			return localVersion;
 		}
