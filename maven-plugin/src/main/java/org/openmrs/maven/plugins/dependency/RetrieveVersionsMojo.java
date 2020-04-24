@@ -43,7 +43,8 @@ public class RetrieveVersionsMojo extends DependencyMojo {
 					plugin("org.apache.maven.plugins", "maven-dependency-plugin", "3.1.2"),
 					goal("copy"),
 					configuration(
-							element("artifact", getVersionsArtifactId())
+							element("artifact", getVersionsArtifactId()),
+							element("useBaseVersion", "true")
 					),
 					getMavenExecutionEnvironment()
 			);
@@ -65,7 +66,7 @@ public class RetrieveVersionsMojo extends DependencyMojo {
 			}
 		}
 		else {
-			getLog().warn("Unable to locate artifact at " + getRetrievedVersionsOutputFile());
+			getLog().warn("Unable to locate artifact at " + latestFile);
 		}
 	}
 

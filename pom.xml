@@ -99,6 +99,13 @@
             <version>2.10.1</version>
         </dependency>
 
+        <!-- For doing a diff of JSON -->
+        <dependency>
+            <groupId>com.github.java-json-tools</groupId>
+            <artifactId>json-patch</artifactId>
+            <version>1.12</version>
+        </dependency>
+
     </dependencies>
 
     <build>

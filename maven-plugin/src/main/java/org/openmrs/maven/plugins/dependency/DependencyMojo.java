@@ -13,9 +13,11 @@ import static org.twdata.maven.mojoexecutor.MojoExecutor.executionEnvironment;
 
 import java.io.File;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
@@ -106,13 +108,43 @@ public abstract class DependencyMojo extends AbstractMojo {
 	protected void writeObjectToYamlFile(Object o, File outputFile) throws MojoExecutionException {
 		try {
 			ensureDirectoryExists(outputFile);
-			ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-			ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
+			ObjectWriter writer = getYamlMapper().writerWithDefaultPrettyPrinter();
 			writer.writeValue(outputFile, o);
 			getLog().info("Wrote output to: " + outputFile);
 		}
 		catch (Exception e) {
 			throw new MojoExecutionException("Error writing to Yaml output file", e);
 		}
+	}
+
+	/**
+	 * Convenience method to enable reading an object from a yaml file
+	 */
+	protected JsonNode readObjectFromYamlFile(File file) throws MojoExecutionException {
+		try {
+			return getYamlMapper().readTree(file);
+		}
+		catch (Exception e) {
+			throw new MojoExecutionException("Error reading yaml from file " + file);
+		}
+	}
+
+	/**
+	 * Utility method to write a string to a file
+	 */
+	protected void writeStringToFile(String s, File f) throws MojoExecutionException {
+		try {
+			FileUtils.writeStringToFile(f, s, "UTF-8");
+		}
+		catch (Exception e) {
+			throw new MojoExecutionException("Error writing to file " + f, e);
+		}
+	}
+
+	/**
+	 * Convenience to get a shared ObjectMapper for reading/writing yaml
+	 */
+	protected ObjectMapper getYamlMapper() {
+		return new ObjectMapper(new YAMLFactory());
 	}
 }
