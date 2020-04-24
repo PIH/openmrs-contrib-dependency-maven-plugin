@@ -33,7 +33,7 @@ Each of these goals are explained below.
 
 ## Goals
 
-The retrieve-versions, create-versions, copmare-versions, and attach-versions goals are all designed to be able to 
+The retrieve-versions, create-versions, compare-versions, and attach-versions goals are designed to be able to 
 work together using the default configurations, and share a common set of configuration properties with the same defaults.
 
 ```yaml
